@@ -13,15 +13,36 @@ const page = () => {
     settitle("");
     setdesc("");
   };
+
+  const deleteHandler = (task) => {
+    let copyTask = [...topTask];
+    copyTask.splice(task, 1); // 1 is the number of element to be deleted
+    settopTask(copyTask);
+  };
+
+  const completionHandler = (task) => {
+    let copyTask = [...topTask];
+    // Change the color to red
+    copyTask[task].title = <strike className="text-red-500"><span className="text-red-500">{copyTask[task].title}</span></strike>;
+    copyTask[task].desc = <strike className="text-red-500"><span className="text-red-500">{copyTask[task].desc}</span></strike>;
+    settopTask(copyTask);
+  }; 
+
   let renderTask = <h2>No Task Found</h2>;
   if (topTask.length > 0) {
     renderTask = topTask.map((task, index) => {
       return (
-        <li>
-          <div className="flex justify-between mb-5">
+        <li key={index} className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between w-2/3">
               <h5 className="text-2xl font-semibold">{task.title}</h5>
-              <h6 className="text-xl font-semibold">{task.desc}</h6>
+              <p className="text-lg font-medium">{task.desc}</p>
           </div>
+          <button 
+          onClick={() => completionHandler(index)}
+          className="bg-lime-500 text-white px-4 py-2 rounded">Complete</button>
+          <button 
+          onClick={() => deleteHandler(index)}
+          className="bg-red-400 text-white px-4 py-2 rounded">Delete</button>
         </li>
       );
     });
